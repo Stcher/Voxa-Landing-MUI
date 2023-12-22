@@ -1,5 +1,7 @@
 // Success page
 import React from 'react';
+import { useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Container, Button, Dialog, Box, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { green } from "@mui/material/colors";
@@ -16,7 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 const useStyles = makeStyles({
-    
+
     formBtns: {
         "& .css-tmesg1-MuiButtonBase-root-MuiButton-root": {
             width: "-moz-available",
@@ -68,7 +70,18 @@ function Suc() {
     const [open, setOpen] = React.useState(false);
     const [openSuc, setOpenSuc] = React.useState(false);
     const classes = useStyles()
+    const [loading, setLoading] = useState(false);
 
+
+    const handleLoadingButtonClick = () => {
+        setLoading(true);
+
+        // Simulate a delay (2 seconds in this case) before opening the second dialog
+        setTimeout(() => {
+            setOpenSuc(true);
+            setLoading(false);
+        }, 2000);
+    };
     function refreshPage() {
         window.location.reload(false);
     }
@@ -86,10 +99,15 @@ function Suc() {
             <Box component="section" >
                 <Button
                     variant="contained"
+                    onClick={handleLoadingButtonClick}
                     className={classes.formBtns}
-                    onClick={handleOpenSuc}
+                    disabled={loading}
                 >
-                    Get started
+                    {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                    ) : (
+                        'Get Started'
+                    )}
                 </Button>
                 <Dialog
                     fullScreen
